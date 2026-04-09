@@ -20,6 +20,8 @@ interface AuthFormProps {
   onSubmit: (values: Record<string, string>) => Promise<void>;
   loading?: boolean;
   error?: string;
+  footer?: React.ReactNode;
+  className?: string;
 }
 
 function buildSchema(fields: AuthFormProps["fields"]) {
@@ -66,7 +68,7 @@ function autocompleteFor(name: AuthFieldName, isRegistrationWithConfirm: boolean
 const PASSWORD_RULES_HINT =
   "Use at least 8 characters with uppercase, lowercase, a number, and a special character (!@#$ etc.).";
 
-export function AuthForm({ title, description, buttonText, fields, onSubmit, loading, error }: AuthFormProps) {
+export function AuthForm({ title, description, buttonText, fields, onSubmit, loading, error, footer, className }: AuthFormProps) {
   const schema = useMemo(() => buildSchema(fields), [fields]);
   const fieldNames = useMemo(() => new Set(fields.map((f) => f.name)), [fields]);
   const showPasswordRules = fieldNames.has("password") && fieldNames.has("confirmPassword");
@@ -85,8 +87,9 @@ export function AuthForm({ title, description, buttonText, fields, onSubmit, loa
   });
 
   return (
+  return (
     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
-      <Card className="mx-auto w-full max-w-md space-y-5 p-6">
+      <Card className={`mx-auto w-full max-w-md space-y-5 p-6 ${className || ""}`}>
         <div>
           <h1 className="text-2xl font-semibold">{title}</h1>
           <p className="mt-1 text-sm text-zinc-500">{description}</p>
@@ -115,6 +118,7 @@ export function AuthForm({ title, description, buttonText, fields, onSubmit, loa
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Please wait..." : buttonText}
           </Button>
+          {footer}
         </form>
       </Card>
     </motion.div>

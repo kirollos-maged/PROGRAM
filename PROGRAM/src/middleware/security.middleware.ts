@@ -10,8 +10,8 @@ export const securityHeaders = helmet({
 });
 
 export const rateLimiter = rateLimit({
-  windowMs: env.rateLimitWindowMs,
-  max: env.rateLimitMax,
+  windowMs: env.security.rateLimitWindowMs,
+  max: env.security.rateLimitMax,
   standardHeaders: true,
   legacyHeaders: false,
 });
